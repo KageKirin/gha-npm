@@ -1,0 +1,29 @@
+name: npm-patch-spec-files
+inputs:
+  spec:
+    description: package spec (path to package.json)
+    type: string
+    required: false
+    default: package.json
+  patch:
+    description: patch for package spec to overwrite .files
+    type: string
+    required: true
+runs:
+  using: composite
+  steps:
+  - name: Show patch
+    shell: bash
+    run: cat ${{ inputs.patch }}
+  - name: Before patch
+    shell: bash
+    run: cat ${{ inputs.spec }}
+  - name: Patch
+    id: patch
+    shell: bash
+    run: |-
+      contents="$(jq --argjson v "$(cat ${{ inputs.patch }})" '.files = $v' ${{ inputs.spec }})"
+      echo -E "${contents}" > ${{ inputs.spec }}
+  - name: After patch
+    shell: bash
+    run: cat ${{ inputs.spec }}
