@@ -28,7 +28,7 @@ runs:
     run: |-
       pushd $(dirname ${{ inputs.spec }})
       notmetafiles=$(echo "${{ steps.npm-pack-dryrun.outputs.files }}" | rg -v "((\.meta$))")
-      for a in $(echo notmetafiles); do
+      for a in $(echo ${notmetafiles}); do
         if [ ! -f "$a.meta" ]; then
           metagen -s ${{ inputs.seed }} $a
         fi
