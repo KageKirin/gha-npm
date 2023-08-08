@@ -1,5 +1,10 @@
 name: npm-metagen
 inputs:
+  path:
+    description: path from where to run the actions
+    type: string
+    required: false
+    default: ${{ github.workspace }}
   spec:
     description: package spec (path to package.json)
     type: string
@@ -16,6 +21,7 @@ runs:
   - id: npm-pack-dryrun
     shell: bash
     run: |-
+      pushd ${{ inputs.path }}
       packjson=$(npm pack ${{ inputs.spec }} --pack-destination ${{ inputs.outdir }} --json --dry-run)
       filename=$(echo ${packjson} | jq -e ".[0].filename" -r)
       files=$(echo ${packjson}    | jq -e ".[0].files[].path" -r)
@@ -28,6 +34,7 @@ runs:
       echo "package_full=${{ inputs.outdir }}/${filename}" >> GITHUB_OUTPUT
       echo "packjson=${packjson}" >> GITHUB_OUTPUT
       echo "files=${files}" >> GITHUB_OUTPUT
+      popd
   - shell: bash
     run: |-
       echo "package: ${{ steps.npm-pack-dryrun.outputs.package }}"
@@ -37,6 +44,7 @@ runs:
   - id: metagen-files
     shell: bash
     run: |-
+      pushd ${{ inputs.path }}
       pushd $(dirname ${{ inputs.spec }})
       allfiles="${{ steps.npm-pack-dryrun.outputs.files }}"
       echo "allfiles: ${allfiles}"
@@ -49,4 +57,5 @@ runs:
           metagen -s ${{ inputs.seed }} $a
         fi
       done
+      popd
       popd
