@@ -54,11 +54,7 @@ runs:
       notmetafiles=$(echo ${allfiles} | rg -v "((\.meta$))")
       echo "notmetafiles: ${notmetafiles}"
 
-      for a in $(echo ${notmetafiles}); do
-        if [ ! -f "$a.meta" ]; then
-          metagen -s ${{ inputs.seed }} $a
-        fi
-      done
+      metagen -s ${{ inputs.seed }} ${notmetafiles}
       fdfind -I "\.meta$"
-      popd
+
       popd
