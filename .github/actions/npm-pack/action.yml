@@ -56,5 +56,5 @@ runs:
       pushd ${{ inputs.path }}
       contents=$(tar tvf ${{ steps.npm-pack.outputs.package_full }})
       echo ${contents}
-      echo "contents=${contents}" >> $GITHUB_OUTPUT
+      echo "contents=\'${contents}\'" >> $GITHUB_OUTPUT
       popd
