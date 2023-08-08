@@ -34,7 +34,7 @@ runs:
       echo "package=${filename}" >> $GITHUB_OUTPUT
       echo "package_full=${{ inputs.outdir }}/${filename}" >> $GITHUB_OUTPUT
       echo "packjson='${packjson}'" >> $GITHUB_OUTPUT
-      echo "files='${files}'" >> $GITHUB_OUTPUT
+      echo "files=${files}" >> $GITHUB_OUTPUT
       popd
       popd
   - shell: bash
