@@ -41,12 +41,13 @@ runs:
     run: |-
       pushd ${{ inputs.path }}
       pushd $(dirname ${{ inputs.spec }})
-      packjson=$(npm pack --pack-destination ${{ inputs.outdir }} --json)
+      packjson=$(npm pack --pack-destination ${{ inputs.outdir }} --json | jq -cM)
       filename=$(echo ${packjson} | jq -e ".[0].filename" -r)
       ls ${{ inputs.outdir }}/${filename}
       echo "package=${filename}" >> $GITHUB_OUTPUT
       echo "package_full=${{ inputs.outdir }}/${filename}" >> $GITHUB_OUTPUT
-      echo "packjson=${packjson}" >> $GITHUB_OUTPUT
+      echo "packjson=\'${packjson}\'" >> $GITHUB_OUTPUT
+      echo "files=\'${files}\'" >> $GITHUB_OUTPUT
       popd
       popd
   - id: list-contents
@@ -55,5 +56,5 @@ runs:
       pushd ${{ inputs.path }}
       contents=$(tar tvf ${{ steps.npm-pack.outputs.package_full }})
       echo ${contents}
-      echo "contents=${contents}" >> $GITHUB_OUTPUT
+      echo "contents=\'${contents}\'" >> $GITHUB_OUTPUT
       popd
