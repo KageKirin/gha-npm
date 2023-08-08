@@ -19,10 +19,21 @@ runs:
       packjson=$(npm pack ${{ inputs.spec }} --pack-destination ${{ inputs.outdir }} --json --dry-run)
       filename=$(echo ${packjson} | jq -e ".[0].filename" -r)
       files=$(echo ${packjson}    | jq -e ".[0].files[].path" -r)
+
+      echo "packjson: ${packjson}"
+      echo "filename: ${filename}"
+      echo "files: ${files}"
+
       echo "package=${filename}" >> GITHUB_OUTPUT
       echo "package_full=${{ inputs.outdir }}/${filename}" >> GITHUB_OUTPUT
       echo "packjson=${packjson}" >> GITHUB_OUTPUT
       echo "files=${files}" >> GITHUB_OUTPUT
+  - shell: bash
+    run: |-
+      echo "package: ${{ steps.npm-pack-dryrun.outputs.package }}"
+      echo "package_full: ${{ steps.npm-pack-dryrun.outputs.package_full }}"
+      echo "packjson: ${{ steps.npm-pack-dryrun.outputs.packjson }}"
+      echo "files: ${{ steps.npm-pack-dryrun.outputs.files }}"
   - id: metagen-files
     shell: bash
     run: |-
