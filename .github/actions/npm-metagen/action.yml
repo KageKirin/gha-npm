@@ -59,6 +59,6 @@ runs:
           metagen -s ${{ inputs.seed }} $a
         fi
       done
-      fd -I "\.meta$"
+      fdfind -I "\.meta$"
       popd
       popd
