@@ -42,7 +42,13 @@ runs:
       pushd ${{ inputs.path }}
       pushd $(dirname ${{ inputs.spec }})
       packjson=$(npm pack --pack-destination ${{ inputs.outdir }} --json | jq -cM)
-      filename=$(echo ${packjson} | jq -e ".[0].filename" -r)
+      filename=$(echo ${packjson}     | jq -e ".[0].filename" -r)
+      files=$(echo $(echo ${packjson} | jq -e ".[0].files[].path" -r))
+
+      echo "packjson: ${packjson}"
+      echo "filename: ${filename}"
+      echo "files: ${files}"
+
       ls ${{ inputs.outdir }}/${filename}
       echo "package=${filename}" >> $GITHUB_OUTPUT
       echo "package_full=${{ inputs.outdir }}/${filename}" >> $GITHUB_OUTPUT
