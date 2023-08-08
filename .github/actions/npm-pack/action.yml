@@ -1,5 +1,10 @@
 name: npm-pack
 inputs:
+  path:
+    description: path from where to run the actions
+    type: string
+    required: false
+    default: ${{ github.workspace }}
   spec:
     description: package spec (path to package.json)
     type: string
@@ -28,19 +33,25 @@ runs:
   steps:
   - shell: bash
     run: |-
+      pushd ${{ inputs.path }}
       mkdir -p {{ inputs.outdir }}
+      popd
   - id: npm-pack
     shell: bash
     run: |-
+      pushd ${{ inputs.path }}
       packjson=$(npm pack ${{ inputs.spec }} --pack-destination ${{ inputs.outdir }} --json)
       filename=$(echo ${packjson} | jq -e ".[0].filename" -r)
       ls ${{ inputs.outdir }}/${filename}
       echo "package=${filename}" >> GITHUB_OUTPUT
       echo "package_full=${{ inputs.outdir }}/${filename}" >> GITHUB_OUTPUT
       echo "packjson=${packjson}" >> GITHUB_OUTPUT
+      popd
   - id: list-contents
     shell: bash
     run: |
+      pushd ${{ inputs.path }}
       contents=$(tar tvf ${{ steps.npm-pack.outputs.package_full }})
       echo ${contents}
       echo "contents=${contents}" >> GITHUB_OUTPUT
+      popd
