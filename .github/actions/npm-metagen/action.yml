@@ -23,7 +23,7 @@ runs:
     run: |-
       pushd ${{ inputs.path }}
       pushd $(dirname ${{ inputs.spec }})
-      packjson=$(npm pack --pack-destination ${{ inputs.outdir }} --json --dry-run)
+      packjson=$(npm pack --pack-destination ${{ inputs.outdir }} --json --dry-run | jq -cM)
       filename=$(echo ${packjson} | jq -e ".[0].filename" -r)
       files=$(echo ${packjson}    | jq -e ".[0].files[].path" -r)
 
