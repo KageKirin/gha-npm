@@ -1,0 +1,36 @@
+name: npm-publish
+inputs:
+  path:
+    description: path from where to run the actions
+    type: string
+    required: false
+    default: ${{ github.workspace }}
+  spec:
+    description: package spec (path to package.json)
+    type: string
+    required: false
+    default: package.json
+  access:
+    description: package access
+    type: string
+    required: false
+    default: public
+  dry-run:
+    description: whether to perform a dry-run
+    type: boolean
+    default: false
+runs:
+  using: composite
+  steps:
+  - id: npm-publish
+    shell: bash
+    run: |-
+      pushd ${{ inputs.path }}
+      pushd $(dirname ${{ inputs.spec }})
+
+      [[ ${{ inputs.dry-run }} ]] && dryrun="--dry-run"
+
+      npm publish --access ${{ inputs.access }} --verbose ${dryrun}
+
+      popd
+      popd
