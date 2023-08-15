@@ -20,10 +20,10 @@ inputs:
 outputs:
   registry:
     description: parsed registry
-    value: ${{ steps.parse-registry.registry }}
+    value: ${{ steps.parse-registry.outputs.registry }}
   scope:
     description: parsed scope
-    value: ${{ steps.parse-registry.scope }}
+    value: ${{ steps.parse-registry.outputs.scope }}
 runs:
   using: composite
   steps:
@@ -39,14 +39,14 @@ runs:
       registryPath=$(echo $registry | sed -e "s|https://||g" -e "s|/$scope||g")
       echo "registryPath: $registryPath"
 
-      echo "scope=$scope" >> $GITHUB_OUTPUT
-      echo "registry=$registryPath" >> $GITHUB_OUTPUT
+      echo "scope=${scope}" >> $GITHUB_OUTPUT
+      echo "registry=${registryPath}" >> $GITHUB_OUTPUT
   - id: create-npmrc
     shell: bash
     run: |-
-      registry=${{ steps.parse-registry.registry }}
+      registry=${{ steps.parse-registry.outputs.registry }}
       echo "registry: $registry"
-      scope=${{ steps.parse-registry.scope }}
+      scope=${{ steps.parse-registry.outputs.scope }}
       echo "scope: $scope"
       token=${{ inputs.token }}
 
