@@ -1,0 +1,57 @@
+name: npm-add-registry
+inputs:
+  path:
+    description: path from where to run the actions
+    type: string
+    required: false
+    default: ${{ github.workspace }}
+  config-file:
+    description: npmrc file (defaults to '.npmrc')
+    type: string
+    required: false
+    default: .npmrc
+  registry:
+    description: full registry URL including 'https://' and '@scope'
+    required: false
+    default: https://npm.pkg.github.com/@${{ github.repository_owner }}
+  token:
+    description: NPM registry token (e.g. GitHub token with package.write)
+    required: true
+outputs:
+  registry:
+    description: parsed registry
+    value: ${{ steps.parse-registry.registry }}
+  scope:
+    description: parsed scope
+    value: ${{ steps.parse-registry.scope }}
+runs:
+  using: composite
+  steps:
+  - id: parse-registry
+    shell: bash
+    run: |-
+      registry=${{ inputs.registry }}
+      echo "registry: $registry"
+
+      scope=$(echo $registry | rg -o '@.+$')
+      echo "scope: $scope"
+
+      registryPath=$(echo $registry | sed -e "s|https://||g" -e "s|/$scope||g")
+      echo "registryPath: $registryPath"
+
+      echo "scope=$scope" >> $GITHUB_OUTPUT
+      echo "registry=$registryPath" >> $GITHUB_OUTPUT
+  - id: create-npmrc
+    shell: bash
+    run: |-
+      registry=${{ steps.parse-registry.registry }}
+      echo "registry: $registry"
+      scope=${{ steps.parse-registry.scope }}
+      echo "scope: $scope"
+      token=${{ inputs.token }}
+
+      echo "//${registry}/:_authToken=${token}" > ${{ inputs.config-file }}
+      if [[ -n "${scope}" ]]; then
+        echo "//${scope}:registry=${registry}/" >> ${{ inputs.config-file }}
+      fi
+      cat ${{ inputs.config-file }}
