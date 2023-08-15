@@ -41,6 +41,22 @@ runs:
 
       echo "scope=${scope}" >> $GITHUB_OUTPUT
       echo "registry=${registryPath}" >> $GITHUB_OUTPUT
+  - id: check-parse-results
+    shell: bash
+    run: |-
+      full_registry=${{ inputs.registry }}
+      echo "full_registry: $full_registry"
+
+      registry=${{ steps.parse-registry.outputs.registry }}
+      echo "registry: $registry"
+      scope=${{ steps.parse-registry.outputs.scope }}
+      echo "scope: $scope"
+
+      recomposed_registry="https://${registry}/@{scope}"
+
+      if [[ ${full_registry} != ${recomposed_registry} ]]; then
+        exit 1
+      fi
   - id: create-npmrc
     shell: bash
     run: |-
