@@ -28,7 +28,12 @@ runs:
       pushd ${{ inputs.path }}
       pushd $(dirname ${{ inputs.spec }})
 
-      [[ ${{ inputs.dry-run }} ]] && dryrun="--dry-run"
+      if [[ ${{ inputs.dry-run }} ]]; then
+        dryrun="--dry-run"
+      else
+        dryrun=""
+      fi
+      echo "dryrun: ${dryrun}"
 
       npm publish --access ${{ inputs.access }} --verbose ${dryrun}
 
