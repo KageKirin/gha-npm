@@ -28,13 +28,10 @@ runs:
       Push-Location ${{ inputs.path }}
       Push-Location (Split-Path -Path ${{ inputs.spec }})
 
+      $dryrun=""
       if (${{ inputs.dry-run }})
       {
         $dryrun="--dry-run"
-      }
-      else
-      {
-        $dryrun=""
       }
       Write-Output "dryrun: $dryrun"
 
