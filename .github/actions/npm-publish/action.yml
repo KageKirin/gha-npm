@@ -28,7 +28,7 @@ runs:
       Push-Location ${{ inputs.path }}
       Push-Location (Split-Path -Path ${{ inputs.spec }})
 
-      $dryrun = @(if (${{ inputs.dry-run }}) {echo '--dry-run'} else {echo ''})
+      $dryrun = if ($${{ inputs.dry-run }}) {'--dry-run'} else {''}
       Write-Output "dryrun: $dryrun"
 
       npm publish --access ${{ inputs.access }} --verbose $dryrun
