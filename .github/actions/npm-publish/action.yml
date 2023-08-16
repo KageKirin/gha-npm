@@ -23,19 +23,22 @@ runs:
   using: composite
   steps:
   - id: npm-publish
-    shell: bash
+    shell: pwsh
     run: |-
-      pushd ${{ inputs.path }}
-      pushd $(dirname ${{ inputs.spec }})
+      Push-Location ${{ inputs.path }}
+      Push-Location (Split-Path -Path ${{ inputs.spec }})
 
-      if [[ $(${{ inputs.dry-run }}) ]]; then
-        dryrun="--dry-run"
+      if (${{ inputs.dry-run }})
+      {
+        $dryrun="--dry-run"
+      }
       else
-        dryrun=""
-      fi
-      echo "dryrun: ${dryrun}"
+      {
+        $dryrun=""
+      }
+      Write-Output "dryrun: $dryrun"
 
-      npm publish --access ${{ inputs.access }} --verbose ${dryrun}
+      npm publish --access ${{ inputs.access }} --verbose $dryrun
 
-      popd
-      popd
+      Pop-Location
+      Pop-Location
