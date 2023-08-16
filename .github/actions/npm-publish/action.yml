@@ -28,7 +28,7 @@ runs:
       pushd ${{ inputs.path }}
       pushd $(dirname ${{ inputs.spec }})
 
-      if [[ ${{ inputs.dry-run }} ]]; then
+      if [[ $(${{ inputs.dry-run }}) ]]; then
         dryrun="--dry-run"
       else
         dryrun=""
