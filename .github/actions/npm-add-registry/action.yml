@@ -10,8 +10,8 @@ inputs:
     type: string
     required: false
     default: .npmrc
-  package-file:
-    description: package.json file (defaults to 'package.json')
+  spec:
+    description: package spec (path to package.json)
     type: string
     required: false
     default: package.json
@@ -93,12 +93,12 @@ runs:
       echo "scope: $scope"
       publish_url="https://${registry}/${scope}"
       echo "publish_url: $publish_url"
-      cat ${{ inputs.package-file }} | jq
+      cat ${{ inputs.spec }} | jq
 
-      echo $(jq --arg v "${publish_url}" '.publishConfig.registry = $v' ${{ inputs.package-file }}) > ${{ inputs.package-file }}.shadow && cat ${{ inputs.package-file }}.shadow | jq > ${{ inputs.package-file }}
+      echo $(jq --arg v "${publish_url}" '.publishConfig.registry = $v' ${{ inputs.spec }}) > ${{ inputs.spec }}.shadow && cat ${{ inputs.spec }}.shadow | jq > ${{ inputs.spec }}
 
-      cat ${{ inputs.package-file }} | jq
-      zsh -c 'for a in `cat ${{ inputs.package-file }} | jq ".files[]" | xargs`; do; echo $a; ls -alG $a; fdfind --no-ignore --glob $a; done'
+      cat ${{ inputs.spec }} | jq
+      zsh -c 'for a in `cat ${{ inputs.spec }} | jq ".files[]" | xargs`; do; echo $a; ls -alG $a; fdfind --no-ignore --glob $a; done'
 
       if [[ $(echo ${registry} | rg github ) == "" ]]; then
         npm ping --registry https://${registry}
