@@ -44,7 +44,7 @@ runs:
   - id: check-parse-results
     shell: bash
     run: |-
-      full_registry=${{ inputs.registry }}
+      full_registry=$(echo ${{ inputs.registry }} | tr '[:upper:]' '[:lower:]')
       echo "full_registry: $full_registry"
 
       registry=${{ steps.parse-registry.outputs.registry }}
