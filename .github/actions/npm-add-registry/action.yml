@@ -30,7 +30,7 @@ runs:
   - id: parse-registry
     shell: bash
     run: |-
-      registry=${{ inputs.registry }}
+      registry=$(echo ${{ inputs.registry }} | tr '[:upper:]' '[:lower:]')
       echo "registry: $registry"
 
       scope=$(echo $registry | rg -o '@.+$' | tr '[:upper:]' '[:lower:]')
