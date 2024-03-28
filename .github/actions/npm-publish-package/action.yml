@@ -34,10 +34,17 @@ runs:
       $dryrun = ($${{ inputs.dry-run }}) ? '--dry-run' : ''
       Write-Output "dryrun: $dryrun"
 
-      $registry="${{ inputs.registry }}".ToLower()
-      Write-Output "publishing ${{ inputs.package }} to $registry"
+      $registry = "${{ inputs.registry }}".ToLower()
+      $package  = "${{ inputs.package }}"
+
+      if ([string]::IsNullOrEmpty($package))
+      {
+        throw 'No package file supplied'
+      }
+
+      Write-Output "publishing $package to $registry"
 
       cat .npmrc
-      npm publish ${{ inputs.package }} --access ${{ inputs.access }} --verbose $dryrun --registry $registry
+      npm publish $package --access ${{ inputs.access }} --verbose $dryrun --registry $registry
 
       Pop-Location
