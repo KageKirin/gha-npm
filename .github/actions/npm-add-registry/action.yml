@@ -101,7 +101,7 @@ runs:
       zsh -c 'for a in `cat ${{ inputs.package-file }} | jq ".files[]" | xargs`; do; echo $a; ls -alG $a; fdfind --no-ignore --glob $a; done'
 
       if [[ $(echo ${registry} | rg github ) == "" ]]; then
-        npm ping --registry ${registry}
+        npm ping --registry https://${registry}
       else
         echo "The GitHub NPM Registry does not support npm ping"
       fi
