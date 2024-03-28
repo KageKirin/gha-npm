@@ -93,12 +93,12 @@ runs:
       echo "scope: $scope"
       publish_url="https://${registry}/${scope}"
       echo "publish_url: $publish_url"
-      cat ${{ inputs.config-file }} | jq
+      cat ${{ inputs.package-file }} | jq
 
-      echo $(jq --arg v "${publish_url}" '.publishConfig.registry = $v' ${{ inputs.config-file }}) > ${{ inputs.config-file }}.shadow && cat ${{ inputs.config-file }}.shadow | jq > ${{ inputs.config-file }}
+      echo $(jq --arg v "${publish_url}" '.publishConfig.registry = $v' ${{ inputs.package-file }}) > ${{ inputs.package-file }}.shadow && cat ${{ inputs.package-file }}.shadow | jq > ${{ inputs.package-file }}
 
-      cat ${{ inputs.config-file }} | jq
-      zsh -c 'for a in `cat ${{ inputs.config-file }} | jq ".files[]" | xargs`; do; echo $a; ls -alG $a; fdfind --no-ignore --glob $a; done'
+      cat ${{ inputs.package-file }} | jq
+      zsh -c 'for a in `cat ${{ inputs.package-file }} | jq ".files[]" | xargs`; do; echo $a; ls -alG $a; fdfind --no-ignore --glob $a; done'
 
       if [[ $(echo ${registry} | rg github ) == "" ]]; then
         npm ping --registry ${registry}
