@@ -33,7 +33,7 @@ runs:
       registry=${{ inputs.registry }}
       echo "registry: $registry"
 
-      scope=$(echo $registry | rg -o '@.+$')
+      scope=$(echo $registry | rg -o '@.+$' | tr '[:upper:]' '[:lower:]')
       echo "scope: $scope"
 
       registryPath=$(echo $registry | sed -e "s|https://||g" -e "s|/$scope||g")
