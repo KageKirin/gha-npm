@@ -10,6 +10,11 @@ inputs:
     type: string
     required: false
     default: .npmrc
+  package-file:
+    description: package.json file (defaults to 'package.json')
+    type: string
+    required: false
+    default: package.json
   registry:
     description: full registry URL including 'https://' and '@scope'
     required: false
