@@ -56,6 +56,7 @@ runs:
       echo "recomposed_registry: $recomposed_registry"
 
       if [[ "${full_registry}" != "${recomposed_registry}" ]]; then
+        echo "recomposed registry differs from input argument. please check inputs."
         exit 1
       fi
   - id: create-npmrc
