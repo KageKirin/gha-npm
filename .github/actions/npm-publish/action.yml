@@ -31,7 +31,13 @@ runs:
       $dryrun = ($${{ inputs.dry-run }}) ? '--dry-run' : ''
       Write-Output "dryrun: $dryrun"
 
-      npm publish --access ${{ inputs.access }} --verbose $dryrun
+      cat ${{ inputs.spec }} | jq
+      cat ${{ inputs.spec }} | jq -r '.publishConfig.registry'
+      $registry=(cat ${{ inputs.spec }} | jq -r '.publishConfig.registry')
+      Write-Output "publishing to ${registry}"
+
+      cat .npmrc
+      npm publish --access public --verbose $dryrun --registry $registry
 
       Pop-Location
       Pop-Location
