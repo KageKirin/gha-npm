@@ -95,8 +95,8 @@ runs:
       cat ${{ inputs.config-file }} | jq
       zsh -c 'for a in `cat ${{ inputs.config-file }} | jq ".files[]" | xargs`; do; echo $a; ls -alG $a; fdfind --no-ignore --glob $a; done'
 
-      if [[ $(echo ${publish_url} | rg github ) == "" ]]; then
-        npm ping --registry ${publish_url}
+      if [[ $(echo ${registry} | rg github ) == "" ]]; then
+        npm ping --registry ${registry}
       else
         echo "The GitHub NPM Registry does not support npm ping"
       fi
