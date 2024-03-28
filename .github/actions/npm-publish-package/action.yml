@@ -34,7 +34,7 @@ runs:
       $dryrun = ($${{ inputs.dry-run }}) ? '--dry-run' : ''
       Write-Output "dryrun: $dryrun"
 
-      Write-Output "publishing to ${{ inputs.registry }}"
+      Write-Output "publishing ${{ inputs.package }} to ${{ inputs.registry }}"
 
       cat .npmrc
       npm publish ${{ inputs.package }} --access ${{ inputs.access }} --verbose $dryrun --registry ${{ inputs.registry }}
