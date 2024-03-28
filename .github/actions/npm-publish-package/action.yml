@@ -1,0 +1,42 @@
+name: npm-publish-package
+inputs:
+  path:
+    description: path from where to run the actions
+    type: string
+    required: false
+    default: ${{ github.workspace }}
+  package:
+    description: package path (.tgz file)
+    type: string
+    required: false
+    default: package.json
+  registry:
+    description: registry URL
+    type: string
+    required: true
+  access:
+    description: package access
+    type: string
+    required: false
+    default: public
+  dry-run:
+    description: whether to perform a dry-run
+    type: boolean
+    default: false
+runs:
+  using: composite
+  steps:
+  - id: npm-publish-package
+    shell: pwsh
+    run: |-
+      Push-Location ${{ inputs.path }}
+
+      $dryrun = ($${{ inputs.dry-run }}) ? '--dry-run' : ''
+      Write-Output "dryrun: $dryrun"
+
+      Write-Output "publishing to ${{ inputs.registry }}"
+
+      cat .npmrc
+      npm publish ${{ inputs.package }} --access ${{ inputs.access }} --verbose $dryrun --registry ${{ inputs.registry }}
+
+      Pop-Location
