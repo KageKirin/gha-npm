@@ -34,9 +34,10 @@ runs:
       $dryrun = ($${{ inputs.dry-run }}) ? '--dry-run' : ''
       Write-Output "dryrun: $dryrun"
 
-      Write-Output "publishing ${{ inputs.package }} to ${{ inputs.registry }}"
+      $registry="${{ inputs.registry }}".ToLower()
+      Write-Output "publishing ${{ inputs.package }} to $registry"
 
       cat .npmrc
-      npm publish ${{ inputs.package }} --access ${{ inputs.access }} --verbose $dryrun --registry ${{ inputs.registry }}
+      npm publish ${{ inputs.package }} --access ${{ inputs.access }} --verbose $dryrun --registry $registry
 
       Pop-Location
