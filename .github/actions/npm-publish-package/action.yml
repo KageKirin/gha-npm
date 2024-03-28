@@ -8,8 +8,7 @@ inputs:
   package:
     description: package path (.tgz file)
     type: string
-    required: false
-    default: package.json
+    required: true
   registry:
     description: registry URL
     type: string
