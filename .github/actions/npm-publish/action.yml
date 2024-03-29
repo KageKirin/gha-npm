@@ -34,11 +34,12 @@ runs:
       cat ${{ inputs.spec }} | jq
       cat ${{ inputs.spec }} | jq -r '.publishConfig.registry'
       $registry=(cat ${{ inputs.spec }} | jq -r '.publishConfig.registry')
+      $registryUrl = $registry.Split("@")[0]
       Write-Output "publishing to ${registry}"
 
       cat .npmrc
-      Write-Output "npm publish --access=${{ inputs.access }} --verbose $dryrun --registry=$registry"
-      npm publish --access=${{ inputs.access }} --verbose $dryrun --registry=$registry
+      Write-Output "npm publish --access=${{ inputs.access }} --verbose $dryrun --registry=$registryUrl"
+      npm publish --access=${{ inputs.access }} --verbose $dryrun --registry=$registryUrl
 
       Pop-Location
       Pop-Location
