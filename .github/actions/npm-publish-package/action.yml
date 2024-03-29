@@ -30,9 +30,6 @@ runs:
     run: |-
       Push-Location ${{ inputs.path }}
 
-      $dryrun = ($${{ inputs.dry-run }}) ? '--dry-run' : ''
-      Write-Output "dryrun: $dryrun"
-
       $registry = "${{ inputs.registry }}".ToLower()
       $registryUrl = $registry.Split("@")[0]
       $package  = "${{ inputs.package }}"
@@ -45,7 +42,15 @@ runs:
       Write-Output "publishing $package to $registry"
 
       cat .npmrc
-      Write-Output "npm publish $package --access=${{ inputs.access }} --verbose $dryrun --registry=$registryUrl"
-      npm publish $package --access=${{ inputs.access }} --verbose $dryrun --registry=$registryUrl
+      if ($${{ inputs.dry-run }})
+      {
+        Write-Output "npm publish $package --access=${{ inputs.access }} --verbose --dry-run --registry=$registryUrl"
+        npm publish $package --access=${{ inputs.access }} --verbose --dry-run --registry=$registryUrl
+      }
+      else
+      {
+        Write-Output "npm publish $package --access=${{ inputs.access }} --verbose --registry=$registryUrl"
+        npm publish $package --access=${{ inputs.access }} --verbose --registry=$registryUrl
+      }
 
       Pop-Location
