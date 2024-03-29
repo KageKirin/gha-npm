@@ -28,9 +28,6 @@ runs:
       Push-Location ${{ inputs.path }}
       Push-Location (Split-Path -Path ${{ inputs.spec }})
 
-      $dryrun = ($${{ inputs.dry-run }}) ? '--dry-run' : ''
-      Write-Output "dryrun: $dryrun"
-
       cat ${{ inputs.spec }} | jq
       cat ${{ inputs.spec }} | jq -r '.publishConfig.registry'
       $registry=(cat ${{ inputs.spec }} | jq -r '.publishConfig.registry')
@@ -38,8 +35,17 @@ runs:
       Write-Output "publishing to ${registry}"
 
       cat .npmrc
-      Write-Output "npm publish --access=${{ inputs.access }} --verbose $dryrun --registry=$registryUrl"
-      npm publish --access=${{ inputs.access }} --verbose $dryrun --registry=$registryUrl
+      if ($${{ inputs.dry-run }})
+      {
+        Write-Output "npm publish --access=${{ inputs.access }} --verbose --dry-run --registry=$registryUrl"
+        npm publish --access=${{ inputs.access }} --verbose --dry-run --registry=$registryUrl
+      }
+      else
+      {
+        Write-Output "npm publish --access=${{ inputs.access }} --verbose --registry=$registryUrl"
+        npm publish --access=${{ inputs.access }} --verbose --registry=$registryUrl
+
+      }
 
       Pop-Location
       Pop-Location
