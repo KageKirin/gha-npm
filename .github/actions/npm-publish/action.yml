@@ -37,7 +37,7 @@ runs:
       Write-Output "publishing to ${registry}"
 
       cat .npmrc
-      npm publish --access public --verbose $dryrun --registry $registry
+      npm publish --access=${{ inputs.access }} --verbose $dryrun --registry=$registry
 
       Pop-Location
       Pop-Location
