@@ -77,7 +77,7 @@ runs:
 
       echo "//${registry}/:_authToken=${token}" > ${{ inputs.config-file }}
       if [[ -n "${scope}" ]]; then
-        echo "//${scope}:registry=${registry}/" >> ${{ inputs.config-file }}
+        echo "//${scope}:registry=https://${registry}/" >> ${{ inputs.config-file }}
       fi
 
       cat ${{ inputs.config-file }}
