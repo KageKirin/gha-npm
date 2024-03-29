@@ -34,6 +34,7 @@ runs:
       Write-Output "dryrun: $dryrun"
 
       $registry = "${{ inputs.registry }}".ToLower()
+      $registryUrl = $registry.Split("@")[0]
       $package  = "${{ inputs.package }}"
 
       if ([string]::IsNullOrEmpty($package))
@@ -44,7 +45,7 @@ runs:
       Write-Output "publishing $package to $registry"
 
       cat .npmrc
-      Write-Output "npm publish $package --access=${{ inputs.access }} --verbose $dryrun --registry=$registry"
-      npm publish $package --access=${{ inputs.access }} --verbose $dryrun --registry=$registry
+      Write-Output "npm publish $package --access=${{ inputs.access }} --verbose $dryrun --registry=$registryUrl"
+      npm publish $package --access=${{ inputs.access }} --verbose $dryrun --registry=$registryUrl
 
       Pop-Location
