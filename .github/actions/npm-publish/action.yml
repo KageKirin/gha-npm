@@ -26,29 +26,29 @@ inputs:
 runs:
   using: composite
   steps:
-  - id: npm-publish
+  - name: 'NPM Publish'
+    id: npm-publish
     shell: pwsh
     run: |-
       Push-Location ${{ inputs.path }}
       Push-Location (Split-Path -Path ${{ inputs.spec }})
 
-      cat ${{ inputs.spec }} | jq
-      cat ${{ inputs.spec }} | jq -r '.publishConfig.registry'
-      $registry=(cat ${{ inputs.spec }} | jq -r '.publishConfig.registry')
-      $registryUrl = $registry.Split("@")[0]
-      Write-Output "publishing to ${registry}"
+      $spec = (Split-Path -Path ${{ inputs.spec }} -Leaf -Resolve)
+      if ([string]::IsNullOrEmpty($spec))
+      {
+        throw 'No spec file provided'
+      }
 
       cat .npmrc
       if ($${{ inputs.dry-run }})
       {
-        Write-Output "npm publish --access=${{ inputs.access }} --verbose --dry-run --registry=$registryUrl"
-        npm publish --access=${{ inputs.access }} --verbose --dry-run --registry=$registryUrl
+        echo "npm publish --access=${{ inputs.access }} --verbose --dry-run"
+        npm publish --access=${{ inputs.access }} --verbose --dry-run
       }
       else
       {
-        Write-Output "npm publish --access=${{ inputs.access }} --verbose --registry=$registryUrl"
-        npm publish --access=${{ inputs.access }} --verbose --registry=$registryUrl
-
+        echo "npm publish --access=${{ inputs.access }} --verbose"
+        npm publish --access=${{ inputs.access }} --verbose
       }
 
       Pop-Location
