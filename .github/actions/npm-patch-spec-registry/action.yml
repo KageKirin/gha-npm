@@ -1,0 +1,33 @@
+name: [NPM] Patch package.json .files
+description: Modifies the .files element of the given package.json spec
+
+inputs:
+  path:
+    description: path from where to run the actions
+    type: string
+    required: false
+    default: ${{ github.workspace }}
+  spec:
+    description: package spec (path to package.json)
+    type: string
+    required: false
+    default: package.json
+  registry:
+    description: package registry URL
+    type: string
+    required: true
+  scope:
+    description: package registry URL
+    type: string
+    required: true
+
+runs:
+  using: composite
+  steps:
+  - name: Apply
+    uses: kagekirin/gha-npm/.github/actions/json-patch-string@main
+    with:
+      path: ${{ inputs.path }}
+      file: ${{ inputs.spec }}
+      element: '.publishConfig.registry'
+      value: ${{ inputs.registry }}@${{ inputs.scope }}
