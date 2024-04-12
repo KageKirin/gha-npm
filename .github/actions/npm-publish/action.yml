@@ -20,7 +20,9 @@ inputs:
   dry-run:
     description: whether to perform a dry-run
     type: boolean
+    required: false
     default: false
+
 runs:
   using: composite
   steps:
