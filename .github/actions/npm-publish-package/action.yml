@@ -1,4 +1,6 @@
-name: npm-publish-package
+name: [NPM] Publish packages
+description: Publishes a pre-packed package
+
 inputs:
   path:
     description: path from where to run the actions
