@@ -1,4 +1,6 @@
-name: npm-publish
+name: [NPM] Publish
+description: Builds and publishes a package given its specfile (package.json)
+
 inputs:
   path:
     description: path from where to run the actions
