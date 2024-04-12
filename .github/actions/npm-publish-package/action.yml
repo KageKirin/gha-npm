@@ -33,28 +33,25 @@ runs:
     shell: pwsh
     run: |-
       Push-Location ${{ inputs.path }}
+      Push-Location (Split-Path -Path ${{ inputs.package }})
 
-      $registry = "${{ inputs.registry }}".ToLower()
-      $registryUrl = $registry.Split("@")[0]
-      $package  = "${{ inputs.package }}"
-
+      $package = (Split-Path -Path ${{ inputs.package }} -Leaf -Resolve)
       if ([string]::IsNullOrEmpty($package))
       {
-        throw 'No package file supplied'
+        throw 'No package file provided'
       }
-
-      Write-Output "publishing $package to $registry"
 
       cat .npmrc
       if ($${{ inputs.dry-run }})
       {
-        Write-Output "npm publish $package --access=${{ inputs.access }} --verbose --dry-run --registry=$registryUrl"
-        npm publish $package --access=${{ inputs.access }} --verbose --dry-run --registry=$registryUrl
+        echo "npm publish $package --access=${{ inputs.access }} --verbose --dry-run"
+        npm publish $package --access=${{ inputs.access }} --verbose --dry-run
       }
       else
       {
-        Write-Output "npm publish $package --access=${{ inputs.access }} --verbose --registry=$registryUrl"
-        npm publish $package --access=${{ inputs.access }} --verbose --registry=$registryUrl
+        echo "npm publish $package --access=${{ inputs.access }} --verbose"
+        npm publish $package --access=${{ inputs.access }} --verbose
       }
 
+      Pop-Location
       Pop-Location
