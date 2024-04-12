@@ -11,10 +11,6 @@ inputs:
     description: package path (.tgz file)
     type: string
     required: true
-  registry:
-    description: registry URL
-    type: string
-    required: true
   access:
     description: package access
     type: string
