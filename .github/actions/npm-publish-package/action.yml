@@ -1,4 +1,6 @@
-name: npm-publish-package
+name: [NPM] Publish packages
+description: Publishes a pre-packed package
+
 inputs:
   path:
     description: path from where to run the actions
@@ -9,10 +11,6 @@ inputs:
     description: package path (.tgz file)
     type: string
     required: true
-  registry:
-    description: registry URL
-    type: string
-    required: true
   access:
     description: package access
     type: string
@@ -21,7 +19,9 @@ inputs:
   dry-run:
     description: whether to perform a dry-run
     type: boolean
+    required: false
     default: false
+
 runs:
   using: composite
   steps:
@@ -29,28 +29,25 @@ runs:
     shell: pwsh
     run: |-
       Push-Location ${{ inputs.path }}
+      Push-Location (Split-Path -Path ${{ inputs.package }})
 
-      $registry = "${{ inputs.registry }}".ToLower()
-      $registryUrl = $registry.Split("@")[0]
-      $package  = "${{ inputs.package }}"
-
+      $package = (Split-Path -Path ${{ inputs.package }} -Leaf -Resolve)
       if ([string]::IsNullOrEmpty($package))
       {
-        throw 'No package file supplied'
+        throw 'No package file provided'
       }
-
-      Write-Output "publishing $package to $registry"
 
       cat .npmrc
       if ($${{ inputs.dry-run }})
       {
-        Write-Output "npm publish $package --access=${{ inputs.access }} --verbose --dry-run --registry=$registryUrl"
-        npm publish $package --access=${{ inputs.access }} --verbose --dry-run --registry=$registryUrl
+        echo "npm publish $package --access=${{ inputs.access }} --verbose --dry-run"
+        npm publish $package --access=${{ inputs.access }} --verbose --dry-run
       }
       else
       {
-        Write-Output "npm publish $package --access=${{ inputs.access }} --verbose --registry=$registryUrl"
-        npm publish $package --access=${{ inputs.access }} --verbose --registry=$registryUrl
+        echo "npm publish $package --access=${{ inputs.access }} --verbose"
+        npm publish $package --access=${{ inputs.access }} --verbose
       }
 
+      Pop-Location
       Pop-Location
