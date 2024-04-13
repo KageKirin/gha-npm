@@ -1,4 +1,4 @@
-name: [NPM] Publish packages
+name: '[NPM] Publish packages'
 description: Publishes a pre-packed package
 
 inputs:
