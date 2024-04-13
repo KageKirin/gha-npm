@@ -1,4 +1,6 @@
-name: npm-pack
+name: '[NPM] Pack'
+description: Pre-pack a npm package
+
 inputs:
   path:
     description: path from where to run the actions
