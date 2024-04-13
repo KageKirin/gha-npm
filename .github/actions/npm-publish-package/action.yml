@@ -21,12 +21,18 @@ inputs:
     type: boolean
     required: false
     default: false
+  token:
+    description: NPM registry token required for publishing
+    type: string
+    required: true
 
 runs:
   using: composite
   steps:
   - id: npm-publish-package
     shell: pwsh
+    env:
+      NODE_AUTH_TOKEN: ${{ inputs.token }}
     run: |-
       Push-Location ${{ inputs.path }}
       Push-Location (Split-Path -Path ${{ inputs.package }})
