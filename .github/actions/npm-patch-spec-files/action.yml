@@ -21,7 +21,7 @@ runs:
   using: composite
   steps:
   - name: Apply
-    uses: kagekirin/gha-npm/.github/actions/json-patch-element@main
+    uses: kagekirin/gha-utils/.github/actions/json-patch-element@main
     with:
       path: ${{ inputs.path }}
       file: ${{ inputs.spec }}
