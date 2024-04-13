@@ -1,4 +1,4 @@
-name: [NPM] Patch package.json .files
+name: '[NPM] Patch package.json .files'
 description: Modifies the .files element of the given package.json spec
 
 inputs:

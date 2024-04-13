@@ -1,4 +1,8 @@
-name: npm-metagen
+name: '[NPM] metagen'
+description: >
+  Generate '.meta' files for all files inside the package hierarchy.
+  This is required for packing UNITY-compatible (UPM) packages.
+
 inputs:
   path:
     description: path from where to run the actions
