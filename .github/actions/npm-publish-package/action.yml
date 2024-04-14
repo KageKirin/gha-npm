@@ -43,7 +43,7 @@ runs:
         throw 'No package file provided'
       }
 
-      cat .npmrc
+      cat $Env:NPM_CONFIG_USERCONFIG
       if ($${{ inputs.dry-run }})
       {
         echo "npm publish $package --access=${{ inputs.access }} --verbose --dry-run"
