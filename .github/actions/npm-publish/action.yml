@@ -45,7 +45,7 @@ runs:
         throw 'No spec file provided'
       }
 
-      cat .npmrc
+      cat $Env:NPM_CONFIG_USERCONFIG
       if ($${{ inputs.dry-run }})
       {
         echo "npm publish --access=${{ inputs.access }} --verbose --dry-run"
