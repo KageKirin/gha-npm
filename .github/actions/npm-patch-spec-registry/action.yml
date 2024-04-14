@@ -12,7 +12,7 @@ inputs:
     type: string
     required: false
     default: package.json
-  registry:
+  registry-url:
     description: package registry URL
     type: string
     required: true
@@ -30,4 +30,4 @@ runs:
       path: ${{ inputs.path }}
       file: ${{ inputs.spec }}
       element: '.publishConfig.registry'
-      value: ${{ inputs.registry }}@${{ inputs.scope }}
+      value: ${{ inputs.registry-url }}@${{ inputs.scope }}
