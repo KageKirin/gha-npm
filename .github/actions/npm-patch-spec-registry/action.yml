@@ -32,7 +32,15 @@ runs:
       file: ${{ inputs.spec }}
       element: '.publishConfig.registry'
       value: ${{ inputs.registry-url }}${{ inputs.scope }}
-  - if: ${{ !contains(inputs.scope, '@') }}
+  - if: ${{ !contains(inputs.scope, '@') && inputs.scope == '' }}
+    name: 'Apply (scope is empty)'
+    uses: kagekirin/gha-utils/.github/actions/json-patch-string@main
+    with:
+      path: ${{ inputs.path }}
+      file: ${{ inputs.spec }}
+      element: '.publishConfig.registry'
+      value: ${{ inputs.registry-url }}
+  - if: ${{ !contains(inputs.scope, '@') && inputs.scope != '' }}
     name: 'Apply (scope does not contain @)'
     uses: kagekirin/gha-utils/.github/actions/json-patch-string@main
     with:
